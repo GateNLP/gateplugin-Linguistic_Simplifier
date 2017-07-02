@@ -118,10 +118,13 @@ public class Simplifier extends AbstractLanguageAnalyser {
   @Override
   public Resource init() throws ResourceInstantiationException {
 
+	if (nvURL == null) {
+		throw new ResourceInstantiationException("The Noun --> Verb mapping file must be provided");
+	}
+	  
     // read in the noun -> verb mapping into a map
-    try {
-      BufferedReader in =
-        new BufferedReader(new InputStreamReader(nvURL.openStream()));
+    try (BufferedReader in =
+            new BufferedReader(new InputStreamReader(nvURL.openStream()))) {      
       String line = in.readLine();
       while(line != null) {
         String[] data = line.split(",", 2);
