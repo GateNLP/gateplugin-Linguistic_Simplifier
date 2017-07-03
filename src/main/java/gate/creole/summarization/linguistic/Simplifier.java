@@ -13,6 +13,17 @@
 
 package gate.creole.summarization.linguistic;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import gate.Annotation;
 import gate.Factory;
 import gate.FeatureMap;
@@ -22,6 +33,7 @@ import gate.Resource;
 import gate.creole.AbstractLanguageAnalyser;
 import gate.creole.ExecutionException;
 import gate.creole.ResourceInstantiationException;
+import gate.creole.ResourceReference;
 import gate.creole.metadata.CreoleParameter;
 import gate.creole.metadata.CreoleResource;
 import gate.creole.metadata.Optional;
@@ -32,16 +44,6 @@ import gate.wordnet.Synset;
 import gate.wordnet.WordNet;
 import gate.wordnet.WordSense;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 @CreoleResource(name = "Linguistic Simplifier", icon = "LinguisticSimplifier")
 public class Simplifier extends AbstractLanguageAnalyser {
 
@@ -49,7 +51,7 @@ public class Simplifier extends AbstractLanguageAnalyser {
 
   private LanguageAnalyser gaz, jape;
 
-  private URL gazURL, japeURL, nvURL;
+  private ResourceReference gazURL, japeURL, nvURL;
 
   private String encoding, annotationSetName;
 
@@ -57,33 +59,60 @@ public class Simplifier extends AbstractLanguageAnalyser {
 
   private WordNet wordnet;
 
-  public URL getNounVerbMapURL() {
+  public ResourceReference getNounVerbMapURL() {
     return nvURL;
   }
 
   @CreoleParameter(defaultValue = "resources/noun_verb.csv")
-  public void setNounVerbMapURL(URL nvURL) {
+  public void setNounVerbMapURL(ResourceReference nvURL) {
     this.nvURL = nvURL;
   }
+  
+  @Deprecated
+	public void setNounVerbMapURL(URL nvURL) {
+    try {
+      this.setNounVerbMapURL(new ResourceReference(nvURL));
+    } catch (URISyntaxException e) {
+      throw new RuntimeException("Error converting URL to ResourceReference", e);
+    }
+	}
 
-  public URL getJapeURL() {
+  public ResourceReference getJapeURL() {
     return japeURL;
   }
 
   @CreoleParameter(defaultValue = "resources/gazetteer/lists.def")
-  public void setGazetteerURL(URL gazURL) {
+  public void setGazetteerURL(ResourceReference gazURL) {
     this.gazURL = gazURL;
   }
+  
+  @Deprecated
+  public void setGazetteerURL(URL gazURL) {
+    try {
+      this.setGazetteerURL(new ResourceReference(gazURL));
+    } catch (URISyntaxException e) {
+      throw new RuntimeException("Error converting URL to ResourceReference", e);
+    }
+  }
 
-  public URL getGazetteerURL() {
+  public ResourceReference getGazetteerURL() {
     return gazURL;
   }
 
   @CreoleParameter(defaultValue = "resources/jape/main.jape")
-  public void setJapeURL(URL japeURL) {
+  public void setJapeURL(ResourceReference japeURL) {
     this.japeURL = japeURL;
   }
 
+  @Deprecated
+  public void setJapeURL(URL japeURL) {
+    try {
+      this.setJapeURL(new ResourceReference(japeURL));
+    } catch (URISyntaxException e) {
+      throw new RuntimeException("Error converting URL to ResourceReference", e);
+    }
+  }
+  
   public String getEncoding() {
     return encoding;
   }
