@@ -16,6 +16,9 @@
 	<groupId>uk.ac.gate.plugins</groupId>
 	<artifactId>linguistic-simplifier</artifactId>
 	<version>8.5-SNAPSHOT</version>
+	
+	<name>Linguistic Simplifier</name>
+	<description>Linguistic based techniques for text simplification</description>
 
 	<licenses>
 		<license>
